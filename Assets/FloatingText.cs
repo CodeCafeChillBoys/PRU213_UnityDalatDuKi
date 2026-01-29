@@ -36,7 +36,7 @@ public class FloatingText : MonoBehaviour
             textMesh.color = Color.green; // Màu Xanh
         }
         else
-        {
+    {
             textMesh.text = "-" + soTien + "k";
             textMesh.color = Color.red;   // Màu Đỏ
         }

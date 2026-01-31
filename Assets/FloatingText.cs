@@ -1,26 +1,44 @@
 ﻿using UnityEngine;
-using TMPro; // Bắt buộc để dùng TextMeshPro
+using TMPro; // Bắt buộc
 
 public class FloatingText : MonoBehaviour
 {
-    public float tocDoBay = 50f;
-    public float thoiGianSong = 1.5f;
+    // --- SỬA Ở ĐÂY: Thêm chữ UGUI vào đuôi ---
+    public TextMeshProUGUI textMesh;
+
+    public float tocDoBay = 50f; // Tăng tốc độ lên vì UI tính theo Pixel
+    public float thoiGianBienMat = 1.5f;
+
+    void Awake()
+    {
+        // Tự tìm component UI
+        if (textMesh == null) textMesh = GetComponent<TextMeshProUGUI>();
+    }
 
     void Start()
     {
-        // Tự sát sau 1.5 giây
-        Destroy(gameObject, thoiGianSong);
+        Destroy(gameObject, thoiGianBienMat);
     }
 
     void Update()
     {
-        // Bay lên trên
+        // Bay lên theo hướng trục Y của màn hình
         transform.Translate(Vector3.up * tocDoBay * Time.deltaTime);
     }
 
-    public void HienThiSoTien(float soTien)
+    public void HienThiSoTien(float soTien, bool laCongTien)
     {
-        // Sửa nội dung chữ
-        GetComponent<TextMeshProUGUI>().text = "-" + soTien + "k";
+        if (textMesh == null) return;
+
+        if (laCongTien)
+        {
+            textMesh.text = "+" + soTien + "k";
+            textMesh.color = Color.green; // Màu Xanh
+        }
+        else
+    {
+            textMesh.text = "-" + soTien + "k";
+            textMesh.color = Color.red;   // Màu Đỏ
+        }
     }
 }

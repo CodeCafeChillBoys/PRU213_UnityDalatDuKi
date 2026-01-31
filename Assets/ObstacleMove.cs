@@ -51,7 +51,7 @@ public class ObstacleMove : MonoBehaviour
 
         NavMeshHit hit;
         // Tìm điểm hợp lệ trên NavMesh gần vị trí ngẫu nhiên đó
-        if (NavMesh.SamplePosition(randomDirection, out hit, banKinhDiChuyen, 1))
+        if (NavMesh.SamplePosition(randomDirection, out hit, banKinhDiChuyen, agent.areaMask))
         {
             agent.SetDestination(hit.position);
         }

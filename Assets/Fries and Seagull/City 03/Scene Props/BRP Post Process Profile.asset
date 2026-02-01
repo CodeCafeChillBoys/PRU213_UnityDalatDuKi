@@ -40,6 +40,9 @@ MonoBehaviour:
   thicknessModifier:
     overrideState: 0
     value: 1
+  zBias:
+    overrideState: 0
+    value: 0.0001
   directLightingStrength:
     overrideState: 0
     value: 0
@@ -101,8 +104,8 @@ MonoBehaviour:
     value: {fileID: 0}
     defaultState: 1
   tonemapper:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 2
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -1423,7 +1426,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.66
+    value: 0.5
   threshold:
     overrideState: 1
     value: 1

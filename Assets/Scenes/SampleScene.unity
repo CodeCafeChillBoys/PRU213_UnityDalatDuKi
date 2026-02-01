@@ -304487,9 +304487,9 @@ MonoBehaviour:
   tienHienCo: 500
   doBenXe: 100
   dangGiaoHang: 0
-  textTienUI: {fileID: 1141786359}
+  textTienUI: {fileID: 0}
   chuBayPrefab: {fileID: 6737175642152414187, guid: 9df864e69d831c546ab0277e55b653fa, type: 3}
-  viTriHienChu: {fileID: 1141786358}
+  viTriHienChu: {fileID: 0}
 --- !u!4 &1280884500
 Transform:
   m_ObjectHideFlags: 0

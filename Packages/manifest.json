@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "com.unity.2d.enhancers": "1.0.0",
+    "com.unity.ai.assistant": "1.5.0-pre.2",
+    "com.unity.ai.generators": "1.5.0-pre.2",
+    "com.unity.ai.inference": "2.5.0",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.burst": "1.8.26",
     "com.unity.cinemachine": "2.10.5",
@@ -13,6 +17,7 @@
     "com.unity.multiplayer.center": "1.0.1",
     "com.unity.nuget.mono-cecil": "1.11.6",
     "com.unity.package-validation-suite": "0.22.0-preview",
+    "com.unity.postprocessing": "3.5.1",
     "com.unity.probuilder": "6.0.8",
     "com.unity.render-pipelines.core": "17.3.0",
     "com.unity.render-pipelines.universal": "17.3.0",

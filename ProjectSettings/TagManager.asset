@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Enemy
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -42,6 +43,24 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2786828141
+    locked: 0
+  - name: Midground
+    uniqueID: 510413519
+    locked: 0
+  - name: Player
+    uniqueID: 2046834489
+    locked: 0
+  - name: 'Foreground '
+    uniqueID: 4085404099
+    locked: 0
+  - name: VFX
+    uniqueID: 1139588613
+    locked: 0
+  - name: UI
+    uniqueID: 3625621947
     locked: 0
   m_RenderingLayers:
   - Default

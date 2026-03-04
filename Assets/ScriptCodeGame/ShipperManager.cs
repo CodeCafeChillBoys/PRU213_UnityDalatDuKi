@@ -1,100 +1,112 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // QUAN TRỌNG
+using TMPro;
 
 public class ShipperManager : MonoBehaviour
 {
     [Header("THÔNG SỐ NGƯỜI CHƠI")]
-    public float tienHienCo = 0f; // Tiền trong ví
-    public float doBenXe = 100f;  // Độ bền xe
+    public float tienHienCo = 0f;
+    public float doBenXe = 100f;
+    private float thoiGianHoiPhuc = 0;
 
     [Header("TRẠNG THÁI GIAO HÀNG")]
-    public bool dangGiaoHang = false; // Biến kiểm tra đang rảnh hay bận
+    public bool dangGiaoHang = false;
 
     [Header("GIAO DIỆN (Kéo thả vào đây)")]
-    public TextMeshProUGUI textTienUI; // Kéo Text_TienMat vào đây
-    public GameObject chuBayPrefab;    // Kéo Prefab chữ bay (FloatingText) vào đây
-    public Transform viTriHienChu;     // Kéo cái Text UI hoặc vị trí trên đầu xe vào đây
+    public TextMeshProUGUI textTienUI;
+    public GameObject chuBayPrefab;
+    public Transform viTriHienChu;
+    public Canvas mainCanvas;
+    public InventoryManager tuiDo;
+
+    // --- THÊM DÒNG NÀY ĐỂ KẾT NỐI VỚI HỆ THỐNG NHIỆM VỤ ---
+    public MissionManager heThongNhiemVu;
 
     void Start()
     {
-        // Cập nhật giao diện ngay khi vào game
         CapNhatTienUI();
     }
 
-    // --- PHẦN 1: NHẬN VÀ TRẢ ĐƠN HÀNG (Gọi từ MissionZone) ---
-
-    // Hàm gọi khi chạm vào điểm Lấy Hàng (A)
     public void NhanDonHang()
     {
         dangGiaoHang = true;
         Debug.Log("Shipper: Đã lấy hàng! Đang tìm nhà khách...");
 
-        // Có thể thêm âm thanh "Ting" nhận đơn ở đây
+        if (tuiDo != null)
+        {
+            tuiDo.NhatPizzaVaoTui();
+        }
+
+        // --- GỌI HỆ THỐNG: Bật mũi tên và hiện Khách Hàng ---
+        if (heThongNhiemVu != null)
+        {
+            heThongNhiemVu.TrangThaiDiGiaoHang();
+        }
     }
 
-    // Hàm gọi khi chạm vào điểm Trả Hàng (B)
-    // QUAN TRỌNG: Phải có (float tienThuong) để nhận tiền từ MissionZone
     public void HoanThanhDonHang(float tienThuong)
     {
-        dangGiaoHang = false; // Trở về trạng thái rảnh
-        tienHienCo += tienThuong; // Cộng tiền vào ví
+        dangGiaoHang = false;
+        tienHienCo += tienThuong;
 
-        CapNhatTienUI(); // Cập nhật số mới lên màn hình
-
-        // Hiện hiệu ứng chữ bay (+50k)
+        CapNhatTienUI();
         TaoHieuUngBay(tienThuong, true);
 
         Debug.Log("Shipper: Giao thành công! Nhận được: " + tienThuong);
+
+        if (tuiDo != null)
+        {
+            tuiDo.XoaPizzaKhoiTui();
+        }
+
+        // --- GỌI HỆ THỐNG: Tắt mũi tên và tạo Cửa hàng mới ---
+        if (heThongNhiemVu != null)
+        {
+            heThongNhiemVu.TrangThaiChoNhanDon();
+        }
     }
 
-    // --- PHẦN 2: XỬ LÝ VA CHẠM (Gọi từ AI Car) ---
-
-    // Hàm này được gọi bởi Xe AI khi đâm trúng
     public void BiTruTien(float soTienMat)
     {
+        if (Time.time < thoiGianHoiPhuc) return;
+
         tienHienCo -= soTienMat;
-        if (tienHienCo < 0) tienHienCo = 0; // Không cho âm tiền
+        if (tienHienCo < 0) tienHienCo = 0;
 
-        CapNhatTienUI(); // Cập nhật số mới lên màn hình
-
-        // Hiện hiệu ứng chữ bay (-20k) -> false nghĩa là bị trừ
+        CapNhatTienUI();
         TaoHieuUngBay(soTienMat, false);
+
+        thoiGianHoiPhuc = Time.time + 5f;
+        Debug.Log("Bị trừ tiền! Đang bất tử trong 5s...");
     }
 
     public void BiVaCham(float satThuong)
     {
         doBenXe -= satThuong;
         if (doBenXe < 0) doBenXe = 0;
-        // Nếu có thanh máu (Slider) thì cập nhật ở đây
     }
-
-    // --- PHẦN 3: CÁC HÀM HỖ TRỢ (UI & Hiệu ứng) ---
 
     void CapNhatTienUI()
     {
         if (textTienUI != null)
         {
-            // Định dạng hiển thị: Ví dụ 150k
-            textTienUI.text = "Ví: " + tienHienCo.ToString("F0") + "k";
+            // Đã sửa lại lỗi text = text = ở đây
+            textTienUI.text = tienHienCo.ToString("N0") + " VND";
         }
     }
 
-    // Hàm tạo chữ bay (Đã nâng cấp để biết là Cộng hay Trừ)
     void TaoHieuUngBay(float soTien, bool laCongTien)
     {
-        if (chuBayPrefab != null && viTriHienChu != null)
+        if (chuBayPrefab != null && textTienUI != null)
         {
-            // 1. Sinh ra chữ mới
-            GameObject chuMoi = Instantiate(chuBayPrefab, viTriHienChu.position, Quaternion.identity, viTriHienChu.parent);
+            GameObject textMoi = Instantiate(chuBayPrefab, textTienUI.transform.parent);
+            textMoi.transform.position = textTienUI.transform.position;
+            textMoi.transform.localPosition += new Vector3(0, 50, 0);
 
-            // 2. Lấy script trên chữ đó
-            var script = chuMoi.GetComponent<FloatingText>();
-
-            if (script != null)
+            FloatingText scriptText = textMoi.GetComponent<FloatingText>();
+            if (scriptText != null)
             {
-                // 3. Gửi lệnh: Số tiền bao nhiêu? Là cộng hay trừ?
-                script.HienThiSoTien(soTien, laCongTien);
+                scriptText.HienThiSoTien(soTien, laCongTien);
             }
         }
     }

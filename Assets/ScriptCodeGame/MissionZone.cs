@@ -8,18 +8,14 @@ public class MissionZone : MonoBehaviour
     public LoaiZone loaiZone;
     public float tienThuong = 50f;
 
-    // --- BỎ PHẦN KHAI BÁO BIẾN DIEM TIEP THEO VÌ KHÔNG CẦN DÙNG NỮA ---
-    // public GameObject diemTiepTheo; 
-    // public GameObject diemKhoiDau;  
-
-    // --- BỎ LUÔN HÀM START ---
-    // (Vì không cần ẩn điểm B lúc đầu game nữa)
+    [Header("Giao diện Hướng Dẫn")]
+    public GameObject panelHuongDan; // Sẽ kéo HuongDan_Panel vào đây
+    private bool daXemHuongDan = false; // Bộ nhớ: Đã xem chưa? (Tránh hiện lại nhiều lần)
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Tìm GameManager xịn
             ShipperManager shipper = FindFirstObjectByType<ShipperManager>();
 
             if (shipper != null)
@@ -34,25 +30,28 @@ public class MissionZone : MonoBehaviour
         // TRƯỜNG HỢP 1: Tại điểm LẤY HÀNG (A)
         if (loaiZone == LoaiZone.DiemLayHang)
         {
-            // Chỉ nhận đơn nếu đang rảnh tay
+            // --- THÊM PHẦN HIỆN HƯỚNG DẪN Ở ĐÂY ---
+            // Nếu có bảng hướng dẫn và người chơi chưa xem bao giờ
+            if (panelHuongDan != null && daXemHuongDan == false)
+            {
+                panelHuongDan.SetActive(true); // Bật bảng lên
+                Time.timeScale = 0f;           // Đóng băng thời gian (xe phanh gấp)
+                daXemHuongDan = true;          // Đánh dấu là đã xem
+            }
+            // --------------------------------------
+
             if (!shipper.dangGiaoHang)
             {
                 shipper.NhanDonHang();
                 Debug.Log("Đã nhận đơn! Hãy chạy đến điểm giao hàng.");
-
-                // --- ĐÃ XÓA LỆNH ẨN/HIỆN Ở ĐÂY ---
             }
         }
         // TRƯỜNG HỢP 2: Tại điểm TRẢ HÀNG (B)
         else if (loaiZone == LoaiZone.DiemTraHang)
         {
-            // Chỉ trả hàng nếu đang có hàng
             if (shipper.dangGiaoHang)
             {
                 shipper.HoanThanhDonHang(tienThuong);
-                Debug.Log("Giao thành công! Có thể quay lại lấy hàng tiếp.");
-
-                // --- ĐÃ XÓA LỆNH ẨN/HIỆN Ở ĐÂY ---
             }
         }
     }

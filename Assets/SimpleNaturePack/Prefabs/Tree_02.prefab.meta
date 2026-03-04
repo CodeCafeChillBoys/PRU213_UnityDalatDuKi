@@ -1,10 +1,5 @@
 fileFormatVersion: 2
 guid: e289bf5debb17f6459818c207d781953
-PrefabImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 162153
@@ -12,3 +7,8 @@ AssetOrigin:
   packageVersion: 1.24
   assetPath: Assets/SimpleNaturePack/Prefabs/Tree_02.prefab
   uploadId: 582302
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -32,12 +32,12 @@ public class FloatingText : MonoBehaviour
 
         if (laCongTien)
         {
-            textMesh.text = "+" + soTien + "k";
+            textMesh.text = "+" + soTien.ToString("N0") + "VNĐ";
             textMesh.color = Color.green; // Màu Xanh
         }
         else
     {
-            textMesh.text = "-" + soTien + "k";
+            textMesh.text = "-" + soTien.ToString("N0") + "VNĐ";
             textMesh.color = Color.red;   // Màu Đỏ
         }
     }

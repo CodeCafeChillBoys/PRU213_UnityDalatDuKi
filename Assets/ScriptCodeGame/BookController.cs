@@ -9,7 +9,7 @@ public class BookController : MonoBehaviour
     void Update()
     {
         // Kiểm tra xem người chơi có vừa gõ phím F xuống không
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             DoiTrangThaiSach(); // Nếu có thì tự động gọi hàm mở/đóng sách
         }

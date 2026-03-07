@@ -22,6 +22,14 @@ public class ShipperManager : MonoBehaviour
     // --- THÊM DÒNG NÀY ĐỂ KẾT NỐI VỚI HỆ THỐNG NHIỆM VỤ ---
     public MissionManager heThongNhiemVu;
 
+    [Header("--- HỆ THỐNG ĐUA XE ---")]
+    public bool dangChayXe = false;
+
+    [Header("--- ÂM THANH ---")]
+    public AudioSource loaPhatNhac;
+    public AudioClip amThanhTruTien;
+    public AudioClip amThanhCongTien;
+
     void Start()
     {
         CapNhatTienUI();
@@ -37,7 +45,6 @@ public class ShipperManager : MonoBehaviour
             tuiDo.NhatPizzaVaoTui();
         }
 
-        // --- GỌI HỆ THỐNG: Bật mũi tên và hiện Khách Hàng ---
         if (heThongNhiemVu != null)
         {
             heThongNhiemVu.TrangThaiDiGiaoHang();
@@ -59,7 +66,12 @@ public class ShipperManager : MonoBehaviour
             tuiDo.XoaPizzaKhoiTui();
         }
 
-        // --- GỌI HỆ THỐNG: Tắt mũi tên và tạo Cửa hàng mới ---
+        // Đã sửa lại lỗi kiểm tra sai tên biến ở đây
+        if (loaPhatNhac != null && amThanhCongTien != null)
+        {
+            loaPhatNhac.PlayOneShot(amThanhCongTien);
+        }
+
         if (heThongNhiemVu != null)
         {
             heThongNhiemVu.TrangThaiChoNhanDon();
@@ -76,6 +88,11 @@ public class ShipperManager : MonoBehaviour
         CapNhatTienUI();
         TaoHieuUngBay(soTienMat, false);
 
+        if (loaPhatNhac != null && amThanhTruTien != null)
+        {
+            loaPhatNhac.PlayOneShot(amThanhTruTien);
+        }
+
         thoiGianHoiPhuc = Time.time + 5f;
         Debug.Log("Bị trừ tiền! Đang bất tử trong 5s...");
     }
@@ -90,7 +107,6 @@ public class ShipperManager : MonoBehaviour
     {
         if (textTienUI != null)
         {
-            // Đã sửa lại lỗi text = text = ở đây
             textTienUI.text = tienHienCo.ToString("N0") + " VND";
         }
     }
@@ -108,6 +124,62 @@ public class ShipperManager : MonoBehaviour
             {
                 scriptText.HienThiSoTien(soTien, laCongTien);
             }
+        }
+    }
+
+    public void NhanTienThuongVeDich(float soTien)
+    {
+        tienHienCo += soTien;
+        CapNhatTienUI();
+        TaoHieuUngBay(soTien, true);
+
+        // THÊM ÂM THANH KHI CHẠY QUA VẠCH ĐÍCH THƯỜNG
+        if (loaPhatNhac != null && amThanhCongTien != null)
+        {
+            loaPhatNhac.PlayOneShot(amThanhCongTien);
+        }
+
+        Debug.Log("Về đích xuất sắc! Đã cộng: " + soTien + " VNĐ");
+    }
+
+    public void NhanCuocDua()
+    {
+        dangChayXe = true;
+        Debug.Log("Đã nhận cuốc xe! Hãy chạy bạt mạng đến đích.");
+
+        RaceManager heThongDuaXe = FindFirstObjectByType<RaceManager>();
+
+        if (heThongDuaXe != null)
+        {
+            heThongDuaXe.TrangThaiChayDenDich();
+        }
+        else
+        {
+            Debug.LogWarning("Không tìm thấy RaceManager trong Scene này!");
+        }
+    }
+
+    public void HoanThanhCuocDua(float tienThuong)
+    {
+        dangChayXe = false;
+        tienHienCo += tienThuong;
+
+        CapNhatTienUI();
+        TaoHieuUngBay(tienThuong, true);
+
+        // THÊM ÂM THANH KHI HOÀN THÀNH CUỐC ĐUA
+        if (loaPhatNhac != null && amThanhCongTien != null)
+        {
+            loaPhatNhac.PlayOneShot(amThanhCongTien);
+        }
+
+        Debug.Log("Về đích an toàn! Nhận được: " + tienThuong);
+
+        RaceManager heThongDuaXe = FindFirstObjectByType<RaceManager>();
+
+        if (heThongDuaXe != null)
+        {
+            heThongDuaXe.TrangThaiChoNhanCuoc();
         }
     }
 }
